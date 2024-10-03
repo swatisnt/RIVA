@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Birthday Celebration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #222;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .blurred-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('bit.jpeg');
+            background-size: cover;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        .gif-container {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .animated-gif {
+            width: 0;
+            height: 0;
+            opacity: 0;
+            animation: expand 3s forwards;
+        }
+
+        @keyframes expand {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            50% {
+                width: 100px;
+                height: 100px;
+                opacity: 0.5;
+            }
+            100% {
+                width: 500px;
+                height: 500px;
+                opacity: 1;
+            }
+        }
+
+        .slideshow-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 600px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .slides {
+            display: none;
+            width: 80%;
+            max-width: 600px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .birthday-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6em;
+            text-align: center;
+            font-family: 'Great Vibes', cursive;
+            color: white;
+            background-color: black;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1;
+        }
+
+        .start-button {
+            padding: 10px 20px;
+            font-size: 1.5em;
+            background-color: #f39c12;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+<div class="blurred-background"></div> 
+
+<div class="gif-container">
+    <img class="animated-gif" src="Happy Birthday Gif _ Birthday Wishes, Quotes.gif" alt="Happy Birthday GIF">
+</div>
+
+<div class="slideshow-container">
+    <img class="slides" src="image1.jpeg" alt="Slide 1">
+    <img class="slides" src="image2.jpeg" alt="Slide 2">
+    <img class="slides" src="image3.jpeg" alt="Slide 3">
+    <img class="slides" src="image4.jpeg" alt="Slide 4">
+    <img class="slides" src="image5.jpeg" alt="Slide 5">
+    <img class="slides" src="image6.jpeg" alt="Slide 6">
+    <img class="slides" src="image7.jpeg" alt="Slide 7">
+    <img class="slides" src="image8.jpeg" alt="Slide 8">
+    <img class="slides" src="image9.jpeg" alt="Slide 9">
+    <img class="slides" src="image10.jpeg" alt="Slide 10">
+</div>
+
+<div class="birthday-message" id="final-message">Happiest 4th Birthday Rivu!</div> 
+
+<audio id="birthday-tune" src="birthday-tune.mp3" autoplay muted></audio>
+
+<button class="start-button" id="start-button">Start Celebration</button>
+
+<script>
+    let slideIndex = 0;
+    let slideInterval;
+
+    function showSlides() {
+        const slides = document.getElementsByClassName("slides");
+        for (let i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slideIndex++;
+        if (slideIndex > slides.length) {
+            clearInterval(slideInterval);
+            showMessage();
+            return;
+        }
+    
+        slides[slideIndex - 1].style.display = "block"; 
+        
+        if (slideIndex > 1) {
+            slides[slideIndex - 1].style.animation = "fadeIn 1s forwards";
+        }
+    }
+
+    function showMessage() {
+        const slideshowContainer = document.querySelector('.slideshow-container');
+        slideshowContainer.style.display = 'none'; 
+        const finalMessage = document.getElementById('final-message');
+        finalMessage.style.display = 'block'; 
+    }
+
+    function playAudio() {
+        const birthdayTune = document.getElementById('birthday-tune');
+        birthdayTune.muted = false; 
+        birthdayTune.play(); 
+    }
+
+    function startCelebration() {
+        const gifContainer = document.querySelector('.gif-container');
+        gifContainer.style.display = 'flex'; 
+        
+   
+        playAudio();
+
+        setTimeout(() => {
+            gifContainer.style.display = 'none'; 
+            const slideshowContainer = document.querySelector('.slideshow-container');
+            slideshowContainer.style.display = 'flex'; 
+            showSlides(); 
+            slideInterval = setInterval(showSlides, 3000); 
+        }, 3000); 
+    }
+
+    document.getElementById('start-button').addEventListener('click', function () {
+        this.style.display = 'none'; 
+        startCelebration(); 
+    });
+
+    window.onload = function() {
+        const images = document.querySelectorAll('.slides');
+        images.forEach(image => {
+            const img = new Image();
+            img.src = image.src;
+        });
+    }
+</script>
+</body>
+</html>
